@@ -3,8 +3,8 @@ title: "CARTEpigenoQC Report"
 output: html_document
 params:
   sample_name: "PBMC_10k"
-  frip_file: "../../data/example_data/frip_results.tsv"
-  insert_file: "../../data/example_data/car_coverage.tsv"
+  frip_file: "../extdata/frip_results.tsv"
+  insert_file: "../extdata/car_coverage.tsv"
 ---
 
 ```{r setup-global-unique, include=FALSE}

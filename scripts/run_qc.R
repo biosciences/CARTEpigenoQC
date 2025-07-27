@@ -6,8 +6,8 @@ library(GenomicRanges)
 library(rtracklayer)
 
 # ---- INPUT ----
-fragment_path <- "../data/example_data/atac_v1_pbmc_10k_fragments.tsv.gz"
-bed_path <- "../data/example_data/CAR_standard_insertion_sites.bed"
+fragment_path <- "../inst/extdata/atac_v1_pbmc_10k_fragments.tsv.gz"
+bed_path <- "../inst/extdata/CAR_standard_insertion_sites.bed"
 
 # ---- Load CAR Insertion Sites ----
 car_sites <- import(bed_path, format = "bed")
@@ -35,7 +35,7 @@ source("../R/qc_metrics.R")
 frip_df <- calc_frip(fragments = frag_gr, peaks = car_sites)
 
 # ---- Save FRiP Results ----
-frip_output_path <- "../data/example_data/frip_results.tsv"
+frip_output_path <- "../inst/extdata/frip_results.tsv"
 fwrite(frip_df, file = frip_output_path, sep = "\t")
 cat("FRiP results written to frip_results.tsv\n")
 
@@ -44,17 +44,17 @@ source("../R/insertions.R")
 insert_df <- compute_car_coverage(fragments = frag_gr, car_sites = car_sites)
 
 # ---- Save CAR Insertion Coverage Results ----
-insert_output_path <- "../data/example_data/car_coverage.tsv"
+insert_output_path <- "../inst/extdata/car_coverage.tsv"
 fwrite(insert_df, file = insert_output_path, sep = "\t")
 cat("CAR insertion site coverage results written to car_coverage.tsv\n")
 
 # ---- Generate HTML Report (Optional) ----
 source("../R/report.R")
-frip_output_path_rmd <- "../../data/example_data/frip_results.tsv"
-insert_output_path_rmd <- "../../data/example_data/car_coverage.tsv"
+frip_output_path_rmd <- "../extdata/frip_results.tsv"
+insert_output_path_rmd <- "../extdata/car_coverage.tsv"
 render_qc_report(
   input_rmd = "../inst/templates/report_template.Rmd",
-  output_html = "../../data/example_data/qc_report.html",
+  output_html = "../../docs/qc_report.html",
   params = list(
     sample_name = "PBMC_10k",
     frip_file = frip_output_path_rmd,

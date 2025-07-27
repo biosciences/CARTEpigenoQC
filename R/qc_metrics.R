@@ -6,6 +6,9 @@
 #' @param peaks GRanges object of peak regions (e.g., from MACS2 or ArchR)
 #' @return data.table with cell barcodes and FRiP values
 #'
+#' @importFrom data.table data.table :=
+#' @import GenomicRanges
+#' @export
 calc_frip <- function(fragments, peaks) {
   require(GenomicRanges)
   require(data.table)
