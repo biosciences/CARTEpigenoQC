@@ -1,0 +1,100 @@
+---
+title: "CARTEpigenoQC Report"
+output: html_document
+params:
+  sample_name: "PBMC_10k"
+  frip_file: "../extdata/frip_results.tsv"
+  insert_file: "../extdata/car_coverage.tsv"
+---
+
+```{r setup-global-unique, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(data.table)
+library(ggplot2)
+library(DT)
+library(gridExtra)
+```
+
+# 🧬 Sample Information
+
+- **Sample name**: `r params$sample_name`
+- **Report date**: `r Sys.Date()`
+
+---
+
+# 📊 FRiP (Fraction of Reads in Peaks)
+
+```{r frip-load-unique}
+frip_dt <- fread(params$frip_file)
+if (!dir.exists("figures")) dir.create("figures", recursive = TRUE)
+```
+
+## FRiP Summary Statistics
+
+```{r frip-summary-unique}
+summary(frip_dt$frip)
+```
+
+## FRiP Distribution Plot
+
+```{r frip-plot-unique}
+frip_plot <- ggplot(frip_dt, aes(x = frip)) +
+  geom_histogram(fill = "steelblue", bins = 50) +
+  labs(title = "FRiP Score Distribution", x = "FRiP Score", y = "Number of Cells") +
+  theme_minimal()
+ggsave("../../figures/example_frip_plot.png", frip_plot, width = 6, height = 4, bg = "white")
+frip_plot
+```
+
+## Top Cells by FRiP
+
+```{r frip-top-table-unique}
+top_frip <- frip_dt[order(-frip)][1:20]
+datatable(top_frip, options = list(pageLength = 10))
+png("../../figures/frip_top_table.png", width = 800, height = 400)
+grid.table(top_frip)
+dev.off()
+```
+
+---
+
+# 📌 CAR Insertion Site Coverage
+
+```{r insertions-load-unique}
+insert_dt <- fread(params$insert_file)
+```
+
+## Insertion Site Coverage Heatmap
+
+```{r insertions-heatmap-unique}
+insert_heatmap <- ggplot(insert_dt, aes(x = site, y = barcode, fill = insert_reads)) +
+  geom_tile() +
+  scale_fill_gradient(low = "white", high = "firebrick") +
+  labs(title = "Per-cell CAR Insertion Site Coverage", x = "Insertion Site", y = "Cell Barcode") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank()
+  )
+ggsave("../../figures/car_coverage_heatmap.png", insert_heatmap, width = 7, height = 5, bg = "white")
+insert_heatmap
+```
+
+## Top Sites by Total Read Count
+
+```{r insertions-top-sites-unique}
+top_sites <- insert_dt[, .(total_reads = sum(insert_reads)), by = site][order(-total_reads)][1:10]
+print(top_sites)
+png("../../figures/car_site_table.png", width = 800, height = 400)
+grid.table(top_sites)
+dev.off()
+```
+
+---
+
+# ✅ Summary
+
+- Total cells analyzed: `r nrow(frip_dt)`
+- Insertion sites detected: `r length(unique(insert_dt$site))`
+- Report generated on: `r format(Sys.time(), '%Y-%m-%d %H:%M:%S')`
