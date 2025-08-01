@@ -37,46 +37,16 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{color}
-\usepackage{fancyvrb}
-\newcommand{\VerbBar}{|}
-\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
-\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
-% Add ',fontsize=\small' for more characters per line
-\usepackage{framed}
-\definecolor{shadecolor}{RGB}{248,248,248}
-\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
-\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
-\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\BuiltInTok}[1]{#1}
-\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
-\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
-\newcommand{\ExtensionTok}[1]{#1}
-\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
-\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\ImportTok}[1]{#1}
-\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
-\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
-\newcommand{\NormalTok}[1]{#1}
-\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
-\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
-\newcommand{\RegionMarkerTok}[1]{#1}
-\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
-\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
-\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
-\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
 \newsavebox\pandoc@box
@@ -133,20 +103,21 @@
 \urlstyle{same}
 \hypersetup{
   pdftitle={CARTEpigenoQC: A Quality Control Toolkit for CAR-T Single-Cell Epigenomic Data},
+  pdfauthor={Kaitao Lai1},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
 \title{CARTEpigenoQC: A Quality Control Toolkit for CAR-T Single-Cell
 Epigenomic Data}
-\author{}
-\date{\vspace{-2.5em}2025-07-26}
+\author{Kaitao Lai\textsuperscript{1}}
+\date{2025-07-28}
 
 \begin{document}
 \maketitle
 
 \textsuperscript{1} University of Sydney
 
-\subsection{Summary}\label{summary}
+\section{Summary}\label{summary}
 
 CARTEpigenoQC is an R-based toolkit designed to streamline quality
 control (QC) for single-cell epigenomic datasets involving Chimeric
@@ -164,7 +135,7 @@ researchers, core facilities, and translational immunologists in
 ensuring the validity of single-cell epigenomic profiling of engineered
 T cells (Finck and al. 2022; Robinson, Nguyen, and Sadelain 2023).
 
-\subsection{Statement of Need}\label{statement-of-need}
+\section{Statement of Need}\label{statement-of-need}
 
 Despite the rise in single-cell chromatin profiling technologies in
 immunotherapy, current QC pipelines do not provide functionality to
@@ -173,8 +144,9 @@ Existing tools like ArchR (Granja et al. 2021), Signac (Stuart et al.
 2021), or SnapATAC (Fang et al. 2021) focus on general chromatin metrics
 but lack transgene-specific support. CARTEpigenoQC fills this gap by
 integrating standard QC (e.g., FRiP, duplication, peak overlap) with
-direct inspection of vector signal such as EF1α, PGK1, or TRAC locus
-insertions that are common in CAR constructs (Eyquem et al. 2017).
+direct inspection of vector signal such as \(\text{EF1-}\alpha\), PGK1,
+or TRAC locus insertions that are common in CAR constructs (Eyquem et
+al. 2017).
 
 This tool was inspired by the increasing use of vector-based gene
 therapies and the demand for preclinical quality pipelines (Maude et al.
@@ -182,7 +154,7 @@ therapies and the demand for preclinical quality pipelines (Maude et al.
 dependencies. It generates clean, reproducible Markdown-based reports
 suitable for clinical handoff, regulatory review, or publication.
 
-\subsection{Features}\label{features}
+\section{Features}\label{features}
 
 \begin{itemize}
 \tightlist
@@ -193,30 +165,23 @@ suitable for clinical handoff, regulatory review, or publication.
 \item
   Markdown-based report with interactive and static plots.
 \item
-  Compatible with 10x Genomics \texttt{fragments.tsv.gz}, ArchR
-  fragments, and BED-formatted CAR insertion sites.
+  Compatible with 10x Genomics `fragments.tsv.gz', ArchR fragments, and
+  BED-formatted CAR insertion sites.
 \item
   Designed for reproducibility and integration into preclinical
   immunotherapy pipelines.
 \end{itemize}
 
-\subsection{Example Usage}\label{example-usage}
+\section{Example Usage}\label{example-usage}
 
-CARTEpigenoQC includes a \texttt{run\_qc.R} script and report template.
-When supplied with fragment files and a BED file of CAR insertion
+CARTEpigenoQC includes a `run\_qc.R' script and report template. When
+supplied with fragment files and a BED file of CAR insertion
 coordinates, it calculates QC metrics and generates a self-contained
 HTML report.
 
-\begin{verbatim}
-Rscript scripts/run_qc.R \
-  --fragments data/pbmc_10k_fragments.tsv.gz \
-  --car_sites data/CAR_standard_insertion_sites.bed \
-  --sample PBMC_10k
-\end{verbatim}
+\section{Example Outputs}\label{example-outputs}
 
-\subsection{Example Outputs}\label{example-outputs}
-
-\subsubsection{FRiP Score Distribution}\label{frip-score-distribution}
+\subsection{FRiP Score Distribution}\label{frip-score-distribution}
 
 This histogram visualizes the distribution of FRiP (Fraction of Reads in
 Peaks) across all cells. A peak around 0.2--0.4 is expected for
@@ -226,24 +191,79 @@ filtered out in downstream analyses.
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={FRiP Histogram}]{figures/example_frip_plot.png}}
-\caption{FRiP Histogram}
+\pandocbounded{\includegraphics[keepaspectratio,alt={FRiP Histogram: Distribution of FRiP (Fraction of Reads in Peaks) scores across all single cells. This histogram visualizes the signal enrichment, with higher FRiP values indicating better signal-to-noise ratios and higher data quality in single-cell chromatin profiling.}]{figures/example_frip_plot.png}}
+\caption{FRiP Histogram: Distribution of FRiP (Fraction of Reads in
+Peaks) scores across all single cells. This histogram visualizes the
+signal enrichment, with higher FRiP values indicating better
+signal-to-noise ratios and higher data quality in single-cell chromatin
+profiling.}
 \end{figure}
 
-\subsubsection{Top Cells by FRiP}\label{top-cells-by-frip}
+\subsection{Top Cells by FRiP}\label{top-cells-by-frip}
 
 This table lists the top 20 cells with the highest FRiP scores. These
 cells often exhibit clearer chromatin signatures and are more
 informative for downstream applications like motif enrichment or
 regulatory network analysis.
 
-\begin{figure}
-\centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Top FRiP Table}]{figures/frip_top_table.png}}
-\caption{Top FRiP Table}
-\end{figure}
+\subsection{Top FRiP Table}\label{top-frip-table}
 
-\subsubsection{CAR Insertion Site Coverage
+\begingroup
+\small  % can also try \footnotesize, \scriptsize, or \tiny
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.0597}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.3582}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1194}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2985}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\#
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Barcode
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Total
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+In Peaks
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+FRiP
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 & ACAGAAACAGGTCTGC-1 & 3 & 1 & 0.333333333333333 \\
+2 & ACTGTCCCATAGACGG-1 & 6 & 1 & 0.166666666666667 \\
+3 & GCAGCTGTCAATTGGC-1 & 17 & 1 & 0.058823529411765 \\
+4 & TTGTCTAAGCAGTAGC-1 & 24 & 1 & 0.041666666666667 \\
+5 & AGTTACGGTATCTGCA-1 & 1457 & 2 & 0.001372683596431 \\
+6 & CAGTATGAGTCGTATC-1 & 781 & 1 & 0.001280409731114 \\
+7 & ACTATTCTCGGATAAA-1 & 1695 & 2 & 0.001179941002950 \\
+8 & TCAGTCCGTGGACGAT-1 & 957 & 1 & 0.001044932079415 \\
+9 & AATGCCAGTGGCCTCA-1 & 966 & 1 & 0.001035196687371 \\
+10 & AATGGCTGTCCCTTTG-1 & 1002 & 1 & 0.000998003992016 \\
+11 & GCAGATTAGCCCATGC-1 & 1009 & 1 & 0.000991080277502 \\
+12 & AGTCAACAGGCGTCCT-1 & 1020 & 1 & 0.000980392156863 \\
+13 & TGCCTGTTCGCAGATT-1 & 1021 & 1 & 0.000979431929481 \\
+14 & CCCTCTCTCTTAACGG-1 & 1059 & 1 & 0.000944287063267 \\
+15 & CACATGACATATTGGC-1 & 1064 & 1 & 0.000939849624060 \\
+16 & CGCTATCTCGCTCTAC-1 & 1094 & 1 & 0.000914076782450 \\
+17 & TTAACGGAGTCGATAA-1 & 2228 & 2 & 0.000897666068223 \\
+18 & GAAGAGCCAAAGCATA-1 & 1208 & 1 & 0.000827814569536 \\
+19 & CCCGTTAAGGCAATTA-1 & 1234 & 1 & 0.000810372771475 \\
+20 & CAACGTAGTAAGTCTC-1 & 1243 & 1 & 0.000804505229284 \\
+\end{longtable}
+
+\endgroup
+
+Table 1: Top FRiP: Top 20 barcodes ranked by FRiP (Fraction of Reads in
+Peaks) scores. This table summarizes the total number of reads, number
+of reads overlapping peaks, and calculated FRiP values for each cell
+barcode, providing an indicator of signal-to-noise ratio in single-cell
+epigenomic data.
+
+\subsection{CAR Insertion Site Coverage
 Heatmap}\label{car-insertion-site-coverage-heatmap}
 
 The heatmap shows per-cell read coverage across CAR vector insertion
@@ -255,11 +275,16 @@ mosaicism in editing (Torres et al. 2022).
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={CAR Insertion Heatmap}]{figures/car_coverage_heatmap.png}}
-\caption{CAR Insertion Heatmap}
+\pandocbounded{\includegraphics[keepaspectratio,alt={CAR Insertion Heatmap: Heatmap showing CAR (Chimeric Antigen Receptor) insertion site coverage across individual cells. Each row corresponds to a target site, and each column represents a single cell, with color intensity indicating the number of reads supporting integration. This highlights the distribution and specificity of CAR insertions in the dataset.}]{figures/car_coverage_heatmap.png}}
+\caption{CAR Insertion Heatmap: Heatmap showing CAR (Chimeric Antigen
+Receptor) insertion site coverage across individual cells. Each row
+corresponds to a target site, and each column represents a single cell,
+with color intensity indicating the number of reads supporting
+integration. This highlights the distribution and specificity of CAR
+insertions in the dataset.}
 \end{figure}
 
-\subsubsection{Top CAR Sites by Total
+\subsection{Top CAR Sites by Total
 Coverage}\label{top-car-sites-by-total-coverage}
 
 This table summarizes the top 10 CAR insertion sites ranked by the total
@@ -268,34 +293,46 @@ the most active or consistently covered transgene targets, which is
 critical in validating vector design and insertion stability (Frangieh
 et al. 2021).
 
-\begin{figure}
-\centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Top CAR Sites}]{figures/car_site_table.png}}
-\caption{Top CAR Sites}
-\end{figure}
+\section{Top CAR Insertion Site Read
+Counts}\label{top-car-insertion-site-read-counts}
 
-\subsection{Repository and
-Installation}\label{repository-and-installation}
+\begingroup
+\small  % can also try \footnotesize, \scriptsize, or \tiny
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Site & Total Reads \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+B2M\_KO\_CAR\_Target & 91 \\
+TRAC\_CAR\_Eyquem2017 & 53 \\
+RAB11A\_CAR\_Target & 24 \\
+CCR5\_CAR\_Target & 18 \\
+AAVS1\_CAR\_Common & 4 \\
+\end{longtable}
+
+\endgroup
+
+Table 2: Top CAR Insertion Site Read Counts: Read counts mapped to the
+top CAR (Chimeric Antigen Receptor) insertion sites. Each row represents
+a genomic target site with the corresponding number of supporting reads,
+indicating the relative abundance of CAR integrations across different
+loci.
+
+\section{Repository and Installation}\label{repository-and-installation}
 
 The source code is hosted on GitHub:\\
 \url{https://github.com/biosciences/CARTEpigenoQC}
 
-Installation:
+\section{Acknowledgements}\label{acknowledgements}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{devtools}\SpecialCharTok{::}\FunctionTok{install\_github}\NormalTok{(}\StringTok{"biosciences/CARTEpigenoQC"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
+The author thanks collaborators at the University of Sydney for insights
+into CAR-T clinical pipelines, and for pipeline development guidance.
 
-\subsection{Acknowledgements}\label{acknowledgements}
-
-The author thanks collaborators at Westmead Institute for Medical
-Research for insights into CAR-T clinical pipelines, and the Sydney
-Informatics Hub for pipeline development guidance.
-
-\subsection*{References}\label{references}
-\addcontentsline{toc}{subsection}{References}
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
 
 \protect\phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}

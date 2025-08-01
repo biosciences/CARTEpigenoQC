@@ -77,9 +77,9 @@ CARTEpigenoQC/
 
 If you use this package in your work, please cite:
 
-> Lai, K. (2025). *CARTEpigenoQC: A quality control toolkit for CAR-T single-cell epigenomic data*. Journal of Open Source Software.
+> Lai, K. (2025). *CARTEpigenoQC: A quality control toolkit for CAR-T single-cell epigenomic data*. arXiv: https://arxiv.org/abs/2507.23048 (submitted to *Journal of Open Source Software*). https://github.com/biosciences/CARTEpigenoQC
 
-📄 [Paper DOI link will go here]
+📄 [Paper DOI link will be available soon.]
 
 ---
 
